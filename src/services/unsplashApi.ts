@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const UNSPLASH_API_URL = 'https://api.unsplash.com';
-const UNSPLASH_ACCESS_KEY = 'igSQ93kHj8nCwlXI9BDGtdYlf2hiFYXX9xGniY_dMRg'; // აქ უნდა ჩასვათ თქვენი Unsplash API გასაღები
+const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string; 
 
 export interface Photo {
   id: string;
