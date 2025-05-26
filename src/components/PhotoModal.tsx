@@ -1,4 +1,5 @@
 import type { Photo } from '../services/unsplashApi';
+import { useState } from 'react';
 
 interface PhotoModalProps {
   photo: Photo;
@@ -6,6 +7,8 @@ interface PhotoModalProps {
 }
 
 export default function PhotoModal({ photo, onClose }: PhotoModalProps) {
+  const [loading, setLoading] = useState(true);
+
   return (
     <div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center z-50 p-4">
       <div className="bg-white rounded-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto">
@@ -16,11 +19,20 @@ export default function PhotoModal({ photo, onClose }: PhotoModalProps) {
           >
             ✕
           </button>
-          <img
-            src={photo.urls.full}
-            alt={photo.alt_description || 'Unsplash photo'}
-            className="w-full h-auto"
-          />
+          <div className="flex items-center justify-center min-h-[300px]">
+            {loading && (
+              <div className="absolute inset-0 flex items-center justify-center z-10 bg-white bg-opacity-80">
+                <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-solid"></div>
+              </div>
+            )}
+            <img
+              src={photo.urls.full}
+              alt={photo.alt_description || 'Unsplash photo'}
+              className={`w-full h-auto ${loading ? 'invisible' : 'visible'}`}
+              onLoad={() => setLoading(false)}
+              onError={() => setLoading(false)}
+            />
+          </div>
         </div>
         <div className="p-6">
           <div className="flex items-center justify-between mb-4">
