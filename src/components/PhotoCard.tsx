@@ -1,4 +1,4 @@
-import type { Photo } from '../services/unsplashApi';
+import type { Photo } from '../types/photo';
 
 interface PhotoCardProps {
   photo: Photo;

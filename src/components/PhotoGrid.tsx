@@ -1,13 +1,11 @@
 import { useQuery } from '@tanstack/react-query';
 import { searchPhotos, getPhotos } from '../services/unsplashApi';
-import type { Photo } from '../services/unsplashApi';
 import { useState, useEffect } from 'react';
 import PhotoCard from './PhotoCard';
 import PhotoModal from './PhotoModal';
-
-interface PhotoGridProps {
-  searchQuery: string;
-}
+import LoadingSpinner from './LoadingSpinner';
+import Pagination from './Pagination';
+import type { Photo, PhotoGridProps } from '../types/photo';
 
 export default function PhotoGrid({ searchQuery }: PhotoGridProps) {
   const [page, setPage] = useState(1);
@@ -26,12 +24,7 @@ export default function PhotoGrid({ searchQuery }: PhotoGridProps) {
   }, [searchQuery]);
 
   if (isLoading) {
-    return (
-      <div className="flex justify-center items-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-4 border-blue-500 border-solid"></div>
-        <span className="ml-4 text-lg text-gray-600">იტვირთება...</span>
-      </div>
-    );
+    return <LoadingSpinner />;
   }
 
   if (error) {
@@ -54,24 +47,7 @@ export default function PhotoGrid({ searchQuery }: PhotoGridProps) {
         ))}
       </div>
 
-      <div className="flex justify-center mt-8 gap-2">
-        <button
-          onClick={() => setPage((p) => Math.max(1, p - 1))}
-          disabled={page === 1}
-          className="px-4 py-2 bg-gray-200 rounded disabled:opacity-50"
-        >
-          წინა
-        </button>
-        <span className="px-4 py-2">
-          გვერდი {page}
-        </span>
-        <button
-          onClick={() => setPage((p) => p + 1)}
-          className="px-4 py-2 bg-gray-200 rounded"
-        >
-          შემდეგი
-        </button>
-      </div>
+      <Pagination currentPage={page} onPageChange={setPage} />
 
       {selectedPhoto && (
         <PhotoModal

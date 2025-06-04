@@ -1,4 +1,4 @@
-import type { Photo } from '../services/unsplashApi';
+import type { Photo } from '../types/photo';
 import { useState } from 'react';
 import { FaHeart } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';

@@ -1,23 +1,8 @@
 import axios from 'axios';
+import type { Photo } from '../types/photo';
 
 const UNSPLASH_API_URL = 'https://api.unsplash.com';
 const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string; 
-
-export interface Photo {
-  id: string;
-  urls: {
-    full: string;
-    regular: string;
-  };
-  alt_description: string;
-  description: string;
-  user: {
-    name: string;
-    username: string;
-  };
-  likes: number;
-  created_at: string;
-}
 
 export interface SearchPhotosResponse {
   results: Photo[];
