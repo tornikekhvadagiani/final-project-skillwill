@@ -6,11 +6,8 @@ const UNSPLASH_ACCESS_KEY = import.meta.env.VITE_UNSPLASH_ACCESS_KEY as string;
 export interface Photo {
   id: string;
   urls: {
-    raw: string;
     full: string;
     regular: string;
-    small: string;
-    thumb: string;
   };
   alt_description: string;
   description: string;

@@ -1,44 +1,21 @@
 import { useState, useCallback, useEffect } from 'react';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import PhotoGrid from './components/PhotoGrid';
 import { useDebounce } from './hooks/useDebounce';
+import { useSearchHistory } from './hooks/useSearchHistory';
 import SearchInput from './components/SearchInput';
+import { queryClient } from './react-query/queryClient';
 import './App.css'
-
-const SEARCH_HISTORY_KEY = 'search_history';
-
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      staleTime: 1000 * 60 * 5, 
-      gcTime: 1000 * 60 * 30, 
-    },
-  },
-});
 
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
-  const [searchHistory, setSearchHistory] = useState<string[]>([]);
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-
-  // Load history from localStorage
-  useEffect(() => {
-    const history = localStorage.getItem(SEARCH_HISTORY_KEY);
-    if (history) {
-      setSearchHistory(JSON.parse(history));
-    }
-  }, []);
+  const { searchHistory, addToHistory } = useSearchHistory();
 
   // Save to history on search
   useEffect(() => {
-    if (debouncedSearchQuery.trim().length > 0) {
-      setSearchHistory((prev) => {
-        const newHistory = [debouncedSearchQuery, ...prev.filter(q => q !== debouncedSearchQuery)].slice(0, 10);
-        localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
-        return newHistory;
-      });
-    }
-  }, [debouncedSearchQuery]);
+    addToHistory(debouncedSearchQuery);
+  }, [debouncedSearchQuery, addToHistory]);
 
   const handleSearch = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchQuery(e.target.value);
