@@ -23,8 +23,17 @@ export function useSearchHistory() {
     }
   }, []);
 
+  const removeFromHistory = useCallback((queryToRemove: string) => {
+    setSearchHistory((prev) => {
+      const newHistory = prev.filter(query => query !== queryToRemove);
+      localStorage.setItem(SEARCH_HISTORY_KEY, JSON.stringify(newHistory));
+      return newHistory;
+    });
+  }, []);
+
   return {
     searchHistory,
-    addToHistory
+    addToHistory,
+    removeFromHistory
   };
 } 

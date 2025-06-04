@@ -8,9 +8,8 @@ import './App.css'
 function App() {
   const [searchQuery, setSearchQuery] = useState('');
   const debouncedSearchQuery = useDebounce(searchQuery, 500);
-  const { searchHistory, addToHistory } = useSearchHistory();
+  const { searchHistory, addToHistory, removeFromHistory } = useSearchHistory();
 
-  // Save to history on search
   useEffect(() => {
     if (debouncedSearchQuery.trim()) {
       addToHistory(debouncedSearchQuery);
@@ -37,13 +36,35 @@ function App() {
             {searchHistory.length > 0 && (
               <div className="flex flex-wrap gap-2 mt-2">
                 {searchHistory.map((word) => (
-                  <button
+                  <div
                     key={word}
-                    onClick={() => handleHistoryClick(word)}
-                    className="px-3 py-1 bg-gray-200 rounded hover:bg-gray-300 text-sm"
+                    className="flex items-center bg-gray-200 rounded-full px-3 py-1 text-sm"
+                    style={{ position: 'relative' }}
                   >
-                    {word}
-                  </button>
+                    <span
+                      onClick={() => handleHistoryClick(word)}
+                      style={{ cursor: 'pointer' }}
+                    >
+                      {word}
+                    </span>
+                    <button
+                      onClick={() => removeFromHistory(word)}
+                      className="ml-2 text-gray-500 hover:text-red-600 focus:outline-none"
+                      style={{
+                        background: 'none',
+                        border: 'none',
+                        cursor: 'pointer',
+                        fontSize: '16px',
+                        lineHeight: 1,
+                        padding: 0
+                      }}
+                      aria-label="წაშლა"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16">
+                        <path stroke="currentColor" strokeWidth="2" strokeLinecap="round" d="M4 4l8 8M12 4l-8 8"/>
+                      </svg>
+                    </button>
+                  </div>
                 ))}
               </div>
             )}
